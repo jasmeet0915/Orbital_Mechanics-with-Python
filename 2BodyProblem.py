@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.integrate import ode
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
+import bpy
 
 earth_radius = 6372.0
 earth_mu = 398600.0     # product of mass of earth and gravitational constant
@@ -74,8 +75,22 @@ if __name__ == "__main__":
 
     # get position for all the steps in orbit so that it can be plotted
     rs = ys[:, :3]
-
-    print(rs)
-    print(rs.shape)
-
-
+    
+    # place sphere in the initial position
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=1, enter_editmode=False, location=(rs[0, 0]/100, rs[0, 1]/100, rs[0, 2]/100))
+    bpy.ops.anim.keyframe_insert_menu(type='Location')
+    
+    for i in range(rs.shape[0]):
+        current_frame = (i+1)*24
+        bpy.context.scene.frame_set(frame=current_frame)
+        
+        if i == 59:
+            break 
+    
+        bpy.context.object.location[0] = rs[i+1, 0]/100
+        bpy.context.object.location[1] = rs[i+1, 1]/100
+        bpy.context.object.location[2] = rs[i+1, 2]/100
+    
+        bpy.ops.anim.keyframe_insert_menu(type='Location')
+        
+                   
