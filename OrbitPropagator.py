@@ -72,14 +72,15 @@ class OrbitPropagator:
         ax = fig.add_subplot(111, projection='3d')
 
         # plot trajectory
-        ax.plot(self.rs[:0], self.rs[:, 1], self.rs[:, 2], 'w', label="Trajectory")
-        ax.plot([self.rs[0, 0]], [self.rs[0, 1]], [self.rs[0, 2]], 'w0', label="Inital Position")
+        ax.plot(self.rs[:, 0], self.rs[:, 1], self.rs[:, 2], 'w', label="Trajectory")
+        ax.plot([self.rs[0, 0]], [self.rs[0, 1]], [self.rs[0, 2]], 'wo', label="Inital Position")
 
         # plot central_body using polar coordinates of sphere
-        _u, _v = np.meshgrid[0:2*np.pi:20j, 0:np.pi:10j]
+        _u, _v = np.mgrid[0:2*np.pi:20j, 0:np.pi:10j]
         _x = self.central_body["radius"]*np.cos(_u)*np.sin(_v)
         _y = self.central_body["radius"]*np.sin(_u)*np.sin(_v)
         _z = self.central_body["radius"]*np.cos(_v)
+        ax.plot_surface(_x, _y, _z, cmap="Blues")
 
         # plot the x, y, z unit vectors along the axes
         l = self.central_body["radius"] * 2

@@ -1,96 +1,31 @@
 import numpy as np
 from scipy.integrate import ode
-#from matplotlib import pyplot as plt
-import bpy
+from matplotlib import pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import planetary_data as pd
+from OrbitPropagator import OrbitPropagator as op
+plt.style.use('dark_background')
 
-earth_radius = 6372.0
-earth_mu = 398600.0     # product of mass of earth and gravitational constant
 
-
-# function to numerically calculate the derivatives of the state of the object
-# which consists of position vector and velocity vector
-# Those derivative values are passed to the ode solver of scipy module which integrate
-# the velocity to calculate the position and integrate the accl. to get velocity
-def diff_y(t, y, mu):
-    rx, ry, rz, vx, vy, vz = y
-
-    # position vector
-    r = np.array([rx, ry, rz])
-
-    # magnitude of r also known as the norm of vector r
-    mag_r = np.linalg.norm(r)
-
-    # accleration of the body calculated using newton's law of gravitation
-    ax, ay, az = -(r * mu)/mag_r**3
-
-    # we return the derivavtive of position(velocity) and derivative of velocity(accleration)
-    return [vx, vy, vz, ax, ay, az]
-
+cb = pd.earth
 
 if __name__ == "__main__":
 
     # initial position and velocity magnitude
-    r_mag = earth_radius + 500.0
-    v_mag = np.sqrt(earth_mu/r_mag)
+    r_mag = cb['radius'] + 500.0
+    v_mag = np.sqrt(cb['mu']/r_mag)
 
-    # initial state vectors, position and vector
-    # both vectors made relative to the centre of earth
-    # velocity will be in direction perpendicular to the position as it is circular motion
+    # initial position and velocity vectors respectively
     r0 = [r_mag, 0, 0]
     v0 = [0, v_mag, 0]
 
-    # total timespan for the simulation which is equal to period of the orbit in seconds(s)
-    timespan = 100 * 60.0
+    # total timespan of one day in seconds
+    timespan = 3600 * 24.0
 
-    # timestep the smaller the value, more accurate will be the orbit
     dt = 100.0
 
-    # total number of timesteps, position and velocity will be calculated for each timestep
-    # and then used to plot the orbit. np.ceil gives the nearest integer value
-    steps = int(np.ceil(timespan/dt))
-
-    # an empty matrix initialized to store the state of the satellite, position & velocity
-    # for each time step taken
-    ys = np.zeros((steps, 6))
-    # a column vector for all the timesteps
-    ts = np.zeros((steps, 1))
-
-    # initial conditions and insert into ys as state for the first state
-    y0 = r0 + v0
-    ys[0] = np.array(y0)
-    step_count = 1
-
-    solver = ode(diff_y)
-    solver.set_integrator('lsoda')
-    solver.set_initial_value(y0, 0)     # initial state & time
-    solver.set_f_params(earth_mu)
+    propagator = op(r0, v0, timespan, dt, cb)
+    propagator.propagate()
+    propagator.plot_3d(show=True, save=True)
 
 
-    # loop to propagate through the orbit step by step
-    while solver.successful() and step_count < steps:
-        solver.integrate(solver.t+dt)
-        ts[step_count] = solver.t
-        ys[step_count] = solver.y
-        step_count = step_count + 1
-
-    # get position for all the steps in orbit so that it can be plotted
-    rs = ys[:, :3]
-    
-    # place sphere in the initial position
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=1, enter_editmode=False, location=(rs[0, 0]/100, rs[0, 1]/100, rs[0, 2]/100))
-    bpy.ops.anim.keyframe_insert_menu(type='Location')
-    
-    for i in range(rs.shape[0]):
-        current_frame = (i+1)*24
-        bpy.context.scene.frame_set(frame=current_frame)
-        
-        if i == 59:
-            break 
-    
-        bpy.context.object.location[0] = rs[i+1, 0]/100
-        bpy.context.object.location[1] = rs[i+1, 1]/100
-        bpy.context.object.location[2] = rs[i+1, 2]/100
-    
-        bpy.ops.anim.keyframe_insert_menu(type='Location')
-        
-                   
