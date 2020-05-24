@@ -25,4 +25,25 @@ class Satellite:
         self.arg_periapsis = arg_periapsis
         self.period = period
 
+    """Use this function if you want to use satellite TLE data to plot the orbit
+    path: path to the file containing the TLE data"""
+    def propagate_with_tle(self, path):
+        with open(path, 'r') as f:
+            lines = f.readlines()
+
+        # name of satellite
+        line0 = lines[0].strip()
+        # TLE data
+        line1 = lines[1].strip().split()
+        line2 = lines[2].strip().split()
+
+        print(line0)
+        print(line1)
+        print(line2)
+
+        # to do: change the check as person may not enter exactly same name as the one in tle
+        # this is a condition that checks to see if the correct tle data is loaded
+        if line0 != self.name:
+            print("Name of satellite object does not match name on TLE!!")
+
 
