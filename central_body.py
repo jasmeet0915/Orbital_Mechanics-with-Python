@@ -6,12 +6,11 @@ G_km = G_m*10**-9
 
 
 class CentralBody:
-    def __init__(self, name, mass, radius, tilt, axis_tilt=0, rotation_period=0):
+    def __init__(self, name, mass, radius, axis_tilt=0, rotation_period=0):
         self.name = name
         self.mass = mass
         self.radius = radius
-        self.tilt = tilt
-        self.axis_tilt = axis_tilt
+        self.axis_tilt = axis_tilt * (np.pi/180)
         self.rotation_period = rotation_period
 
         self.mu = G_km * self.mass
@@ -22,5 +21,15 @@ class CentralBody:
         _x = self.radius * np.cos(_u) * np.sin(_v)
         _y = self.radius * np.sin(_u) * np.sin(_v)
         _z = self.radius * np.cos(_v)
+
+        axis_x = np.array([-self.radius-1000, self.radius+1000])
+        axis_z = np.tan(self.axis_tilt) * axis_x
+
+        print(axis_x)
+        print(axis_z)
+        print(self.radius)
+        print(axis_x.shape)
+        print(axis_z.shape)
+        return _x, _y, _z, axis_x, axis_z
 
 
