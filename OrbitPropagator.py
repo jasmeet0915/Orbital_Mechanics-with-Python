@@ -102,3 +102,4 @@ class OrbitPropagator:
 
         if save:
             plt.savefig("Plot.png", dpi=300)
+
