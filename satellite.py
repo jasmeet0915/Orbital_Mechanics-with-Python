@@ -28,7 +28,7 @@ class Satellite:
 
         r_norm = a * (1-e**2)/(1+e*np.cos(ta))
 
-        r_perif = r_norm * np.array([m.cos(ta)], m.sin(ta), 0)
+        r_perif = r_norm * np.array([m.cos(ta), m.sin(ta), 0])
         v_perif = m.sqrt(self.center_body.mu*a)/r_norm * np.array([-m.sin(ea), m.cos(ea)*m.sqrt(1-e**2), 0])
 
         perif2eci = np.transpose(utils.eci2perif(raan, arg_periapsis, i))

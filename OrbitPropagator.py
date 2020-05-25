@@ -47,10 +47,12 @@ class OrbitPropagator:
         self.rs = self.ys[:, :3]
         self.vs = self.ys[:, 3:]
 
+
     # function to numerically calculate the derivatives of the state of the object
     # which consists of position vector and velocity vector
     # Those derivative values are passed to the ode solver of scipy module which integrate
     # the velocity to calculate the position and integrate the accl. to get velocity
+
 
     def diff_y(self, t, y):
         rx, ry, rz, vx, vy, vz = y
@@ -62,7 +64,7 @@ class OrbitPropagator:
         mag_r = np.linalg.norm(r)
 
         # acceleration of the body calculated using newton's law of gravitation
-        ax, ay, az = -(r * self.central_body["mu"]) / mag_r ** 3
+        ax, ay, az = -(r * self.central_body.mu) / mag_r ** 3
 
         # we return the derivative of position(velocity) and derivative of velocity(acceleration)
         return [vx, vy, vz, ax, ay, az]
@@ -72,18 +74,15 @@ class OrbitPropagator:
         ax = fig.add_subplot(111, projection='3d')
 
         # plot trajectory
-        ax.plot(self.rs[:, 0], self.rs[:, 1], self.rs[:, 2], 'w', label="Trajectory")
-        ax.plot([self.rs[0, 0]], [self.rs[0, 1]], [self.rs[0, 2]], 'wo', label="Inital Position")
+        ax.plot(self.rs[:, 0], self.rs[:, 1], self.rs[:, 2], 'k', label="Trajectory")
+        ax.plot([self.rs[0, 0]], [self.rs[0, 1]], [self.rs[0, 2]], 'ko', label="Inital Position")
+        plt.show()
 
-        # plot central_body using polar coordinates of sphere
-        _u, _v = np.mgrid[0:2*np.pi:20j, 0:np.pi:10j]
-        _x = self.central_body["radius"]*np.cos(_u)*np.sin(_v)
-        _y = self.central_body["radius"]*np.sin(_u)*np.sin(_v)
-        _z = self.central_body["radius"]*np.cos(_v)
-        ax.plot_surface(_x, _y, _z, cmap="Blues")
+        '''# plot central_body using polar coordinates of sphere
+        ax.plot_surface(center[0], center[1], center[2], cmap="Blues")
 
         # plot the x, y, z unit vectors along the axes
-        l = self.central_body["radius"] * 2
+        l = self.central_body.radius * 2
         x, y, z = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         u, v, w = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
         ax.quiver(x, y, z, u, v, w, color='k')
@@ -102,4 +101,4 @@ class OrbitPropagator:
 
         if save:
             plt.savefig("Plot.png", dpi=300)
-
+'''

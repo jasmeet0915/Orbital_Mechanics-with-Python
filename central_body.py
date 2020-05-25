@@ -4,6 +4,7 @@ import numpy as np
 G_m = 6.67408e-11
 G_km = G_m*10**-9
 
+
 # axis_tilt is in degree and rotation period in seconds
 class CentralBody:
     def __init__(self, name, mass, radius, axis_tilt=0, rotation_period=0):
@@ -25,11 +26,6 @@ class CentralBody:
         axis_x = np.array([-self.radius-1000, self.radius+1000])
         axis_z = np.tan(self.axis_tilt) * axis_x
 
-        print(axis_x)
-        print(axis_z)
-        print(self.radius)
-        print(axis_x.shape)
-        print(axis_z.shape)
         return _x, _y, _z, axis_x, axis_z
 
 
