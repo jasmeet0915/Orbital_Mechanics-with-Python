@@ -1,4 +1,8 @@
 import numpy as np
+import utils
+
+# conversion factor for degree to radian conversion
+degree2rad = np.pi/180
 
 
 class Satellite:
@@ -8,22 +12,17 @@ class Satellite:
         self.sat_type = sat_type
         self.center_body = center_body
 
-    '''Use this function to plot orbit of the satellite using Classical/Keplerian
-     Orbital Elements. Required Parameters:
-     e: eccentricity of the orbit, it is the value that determines the shape of the orbit
-     a: semi-major axis, this vale determines the size of the orbit, it is equal to radius in
-                         case of circular orbit
-     inclination: inclination of orbit in degrees from the equatorial plane of the central body
-     asc_node_long: Longitude of Ascending Node, angle b/w asc_node and vernal equinox
-     arg_periapsis: argument of periapsis, angle b/w periapsis and asc_node in orbital plane'''
-    def propagate_with_coes(self, e, a, inclination, asc_node_long,
-                            arg_periapsis, period):
-        self.e = e
-        self.a = a
-        self.inclination = inclination
-        self.asc_node_long = asc_node_long
-        self.arg_periapsis = arg_periapsis
-        self.period = period
+    def propagate_with_coes(self, orbital_elements):
+        self.orbital_elements = orbital_elements
+        a, e, i, raan, arg_periapsis, mean_anomaly, epoch = self.orbital_elements
+        i = i * degree2rad
+        arg_periapsis = arg_periapsis * degree2rad
+        mean_anomaly = mean_anomaly * degree2rad
+        raan = raan * degree2rad
+
+        # eccentricity anomaly at epoch calculated using mean anomaly at epoch
+        ecc_anomaly = utils.eccentric_anomaly(mean_anomaly, e)
+
 
     """Use this function if you want to use satellite TLE data to plot the orbit
     path: path to the file containing the TLE data"""
