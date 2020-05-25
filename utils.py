@@ -28,6 +28,16 @@ def true_anomaly(ecc_anomaly, e):
 
 
 def eci2perif(raan, aop, i):
-    row0 = [-m.sin(raan)*m.cos(i)*m.sin(aop)+m.cos()]
+    row0 = [-m.sin(raan)*m.cos(i)*m.sin(aop) + m.cos(raan)*m.cos(aop),
+            m.cos(raan)*m.cos(i)*m.sin(aop) + m.sin(raan)*m.cos(aop),
+            m.sin(i)*m.sin(aop)]
+    row1 = [-m.sin(raan)*m.cos(i)*m.cos(aop) - m.cos(raan)*m.sin(aop),
+            m.cos(raan)*m.cos(i)*m.cos(aop) - m.sin(raan)*m.sin(aop),
+            m.sin(i)*m.cos(aop)]
+    row2 = [m.sin(raan)*m.sin(i), -m.cos(raan)*m.sin(i), m.cos(i)]
+
+    return np.array([row0, row1, row2])
+
+
 
 
