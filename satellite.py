@@ -1,8 +1,9 @@
 import numpy as np
+import math as m
 import utils
 
 # conversion factor for degree to radian conversion
-degree2rad = np.pi/180
+degree2rad = np.pi/180.0
 
 
 class Satellite:
@@ -21,7 +22,16 @@ class Satellite:
         raan = raan * degree2rad
 
         # eccentricity anomaly at epoch calculated using mean anomaly at epoch
-        ecc_anomaly = utils.eccentric_anomaly(mean_anomaly, e)
+        ea = utils.eccentric_anomaly(mean_anomaly, e)
+        # true anomaly of at epoch used to calculate initial state vectors
+        ta = utils.true_anomaly(ea, e)
+
+        r_norm = a * (1-e**2)/(1+e*np.cos(ta))
+
+        r_perif = r_norm * np.array([m.cos(ta)], m.sin(ta), 0)
+        v_perif = m.sqrt(self.center_body.mu*a)/r_norm * np.array([-m.sin(ea), m.cos(ea)*m.sqrt(1-e**2), 0])
+
+
 
 
     """Use this function if you want to use satellite TLE data to plot the orbit

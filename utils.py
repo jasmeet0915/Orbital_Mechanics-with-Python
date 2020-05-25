@@ -1,5 +1,5 @@
 import numpy as np
-
+import math as m
 
 def eccentric_anomaly(mean_anomaly, ecc, tol=1e-8):
     if mean_anomaly < np.pi/2.0:
@@ -25,5 +25,9 @@ def true_anomaly(ecc_anomaly, e):
     t2 = (np.sqrt(1-e))*(np.cos(ecc_anomaly/2))
     ta = 2 * np.arctan2(t1, t2)
     return 2
+
+
+def eci2perif(raan, aop, i):
+    row0 = [-m.sin(raan)*m.cos(i)*m.sin(aop)+m.cos()]
 
 
