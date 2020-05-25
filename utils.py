@@ -1,6 +1,7 @@
 import numpy as np
 import math as m
 
+
 def eccentric_anomaly(mean_anomaly, ecc, tol=1e-8):
     if mean_anomaly < np.pi/2.0:
         e0 = mean_anomaly+ecc/2.0

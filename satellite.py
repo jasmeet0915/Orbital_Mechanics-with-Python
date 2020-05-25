@@ -31,7 +31,12 @@ class Satellite:
         r_perif = r_norm * np.array([m.cos(ta)], m.sin(ta), 0)
         v_perif = m.sqrt(self.center_body.mu*a)/r_norm * np.array([-m.sin(ea), m.cos(ea)*m.sqrt(1-e**2), 0])
 
+        perif2eci = np.transpose(utils.eci2perif(raan, arg_periapsis, i))
 
+        r0 = np.dot(perif2eci, r_perif)
+        v0 = np.dot(perif2eci, v_perif)
+
+        return r0, v0
 
 
     """Use this function if you want to use satellite TLE data to plot the orbit
