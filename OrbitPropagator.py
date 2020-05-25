@@ -48,6 +48,7 @@ class OrbitPropagator:
         self.vs = self.ys[:, 3:]
 
 
+
     # function to numerically calculate the derivatives of the state of the object
     # which consists of position vector and velocity vector
     # Those derivative values are passed to the ode solver of scipy module which integrate
@@ -69,36 +70,16 @@ class OrbitPropagator:
         # we return the derivative of position(velocity) and derivative of velocity(acceleration)
         return [vx, vy, vz, ax, ay, az]
 
-    def plot_3d(self, show=False, save=False):
+    def plot_3d(self, center_coords, show=False, save=False):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
 
         # plot trajectory
         ax.plot(self.rs[:, 0], self.rs[:, 1], self.rs[:, 2], 'k', label="Trajectory")
         ax.plot([self.rs[0, 0]], [self.rs[0, 1]], [self.rs[0, 2]], 'ko', label="Inital Position")
+
+        ax.plot_surface(center_coords[0], center_coords[1], center_coords[2], cmap="Blues", alpha=0.6)
+
         plt.show()
+        plt.savefig("Plot.png", dpi=300)
 
-        '''# plot central_body using polar coordinates of sphere
-        ax.plot_surface(center[0], center[1], center[2], cmap="Blues")
-
-        # plot the x, y, z unit vectors along the axes
-        l = self.central_body.radius * 2
-        x, y, z = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        u, v, w = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-        ax.quiver(x, y, z, u, v, w, color='k')
-
-        max_val = np.max(np.abs(self.rs))
-
-        ax.set_xlim([-max_val, max_val])
-        ax.set_ylim([-max_val, max_val])
-        ax.set_zlim([-max_val, max_val])
-
-        ax.set_title("Orbit Propagation")
-        plt.legend()
-
-        if show:
-            plt.show()
-
-        if save:
-            plt.savefig("Plot.png", dpi=300)
-'''

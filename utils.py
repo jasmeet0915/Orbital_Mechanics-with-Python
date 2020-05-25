@@ -25,7 +25,7 @@ def true_anomaly(ecc_anomaly, e):
     t1 = (np.sqrt(1+e))*(np.sin(ecc_anomaly/2))
     t2 = (np.sqrt(1-e))*(np.cos(ecc_anomaly/2))
     ta = 2 * np.arctan2(t1, t2)
-    return 2
+    return ta
 
 
 def eci2perif(raan, aop, i):

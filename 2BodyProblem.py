@@ -15,17 +15,19 @@ def init_central_body():
     return cb
 
 
+cb = init_central_body()
+
+
 def get_orbital_elements(sat_name="iss"):
-    a = (iss['perigee height'] + iss['apogee height'])/2
+    a = cb.radius + (iss['perigee height'] + iss['apogee height'])/2
     eles = [a, iss['e'], iss['i'], iss['raan'], iss['arg_perigee'], iss['ma@epoch'], iss['Epoch']]
     period = (24.0*3600.0)/iss['revs/day']
     return eles, period
 
 
 if __name__ == "__main__":
-    # initialize central body
     cb = init_central_body()
-    sphere_x, sphere_y, sphere_z, axis_x, axis_z = cb.plot_attributes()
+    sphere_coords = cb.plot_attributes()
 
     '''fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -57,11 +59,9 @@ if __name__ == "__main__":
     print(r0)
     print(v0)
 
-    print(timespan)
-
     propagtor = op(r0, v0, timespan, dt=100.0, central_body=cb)
     propagtor.propagate()
-    propagtor.plot_3d()
+    propagtor.plot_3d(sphere_coords)
 
 
 
