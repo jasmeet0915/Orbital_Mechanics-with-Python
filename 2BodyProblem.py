@@ -7,6 +7,7 @@ from OrbitPropagator import OrbitPropagator as op
 from central_body import CentralBody
 from satellite import Satellite
 from data.orbital_elements_data import iss
+import utils
 plt.style.use('dark_background')
 
 
@@ -29,39 +30,35 @@ if __name__ == "__main__":
     cb = init_central_body()
     sphere_coords = cb.plot_attributes()
 
-    '''fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-
-    ax.plot_surface(sphere_x, sphere_y, sphere_z, cmap="Blues", alpha=0.6)
-    axis_y = [0] * axis_x.shape[0]
-    ax.plot(axis_x, axis_y, axis_z, 'k--', label="Axis")
-
-    max_val = cb.radius * 10
-
-    ax.set_xlim([-max_val, max_val])
-    ax.set_ylim([-max_val, max_val])
-    ax.set_zlim([-max_val, max_val])
-
-    ax.set_title("Orbit Propagation")
-    plt.legend()
-    plt.show()
-'''
-    # get list of orbital elements for ISS
-    coes, timespan = get_orbital_elements("iss")
-
     # create satellite object and propagate it using orbital elements
     sat1 = Satellite(sat_id=1, name="ISS", center_body=cb, sat_type="Station")
-    r0, v0 = sat1.propagate_with_tle("data/iss.tle")
+    sat1r0, sat1v0 = sat1.propagate_with_tle("data/iss.tle")
+    sat1r0 = sat1r0.tolist()
+    sat1v0 = sat1v0.tolist()
+    propagtor1 = op(sat1r0, sat1v0, sat1.period, dt=100.0, central_body=cb)
+    propagtor1.propagate()
 
-    r0 = r0.tolist()
-    v0 = v0.tolist()
+    sat2 = Satellite(sat_id=2, name="Starlink-31", center_body=cb, sat_type="Communication")
+    sat2r0, sat2v0 = sat2.propagate_with_tle("data/starlink-31.tle")
+    sat2r0 = sat2r0.tolist()
+    sat2v0 = sat2v0.tolist()
+    propagtor2 = op(sat2r0, sat2v0, sat2.period, dt=100.0, central_body=cb)
+    propagtor2.propagate()
 
-    print(r0)
-    print(v0)
+    sat3 = Satellite(sat_id=3, name="NOAA", center_body=cb, sat_type="Weather")
+    sat3r0, sat3v0 = sat3.propagate_with_tle("data/noaa.tle")
+    sat3r0 = sat3r0.tolist()
+    sat3v0 = sat3v0.tolist()
+    propagtor3 = op(sat3r0, sat3v0, sat3.period, dt=100.0, central_body=cb)
+    propagtor3.propagate()
 
-    propagtor = op(r0, v0, timespan, dt=100.0, central_body=cb)
-    propagtor.propagate()
-    propagtor.plot_3d(sphere_coords)
+    sat1_plot = [propagtor1.rs, 'k', sat1.name]
+    sat2_plot = [propagtor2.rs, 'g', sat2.name]
+    sat3_plot = [propagtor3.rs, 'm', sat3.name]
+
+    satellites_rs = [sat1_plot, sat2_plot, sat3_plot]
+
+    utils.plot_orbits(sphere_coords, satellites_rs)
 
 
 

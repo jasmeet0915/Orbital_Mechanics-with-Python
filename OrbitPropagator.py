@@ -48,7 +48,6 @@ class OrbitPropagator:
         self.vs = self.ys[:, 3:]
 
 
-
     # function to numerically calculate the derivatives of the state of the object
     # which consists of position vector and velocity vector
     # Those derivative values are passed to the ode solver of scipy module which integrate

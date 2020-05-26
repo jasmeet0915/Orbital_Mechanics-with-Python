@@ -7,4 +7,10 @@ Step-by-Step Algorithm used for converting Orbital Elements to state vectors in 
 <br><br>
 TO DO:
 <br> i) Add perturbations in orbit propagation
+<br>
+<br>
+Example Plots:<br>
+<img src="Figure_1.png"><br><br>
+<img src="Figure_2.png">
+
 

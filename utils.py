@@ -1,5 +1,7 @@
 import numpy as np
 import math as m
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def eccentric_anomaly(mean_anomaly, ecc, tol=1e-8):
@@ -38,6 +40,23 @@ def eci2perif(raan, aop, i):
     row2 = [m.sin(raan)*m.sin(i), -m.cos(raan)*m.sin(i), m.cos(i)]
 
     return np.array([row0, row1, row2])
+
+
+def plot_orbits(sphere_coords, satellites):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+    ax.plot_surface(sphere_coords[0], sphere_coords[1], sphere_coords[2], cmap="Blues", alpha=0.6)
+
+    for satellite in satellites:
+        # plot trajectory
+        ax.plot(satellite[0][:, 0], satellite[0][:, 1], satellite[0][:, 2], satellite[1], label=satellite[2])
+        ax.plot([satellite[0][0, 0]], [satellite[0][0, 1]], [satellite[0][0, 2]], satellite[1]+'o')
+
+    ax.set_title("Trajectories")
+    plt.legend()
+    plt.show()
+    plt.savefig("Plot.png", dpi=300)
 
 
 

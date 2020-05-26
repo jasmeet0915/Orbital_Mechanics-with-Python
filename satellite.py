@@ -65,9 +65,9 @@ class Satellite:
         mean_anomaly = float(line2[6]) * degree2rad
         mean_motion = float(line2[7]) # revs/day
 
-        period = (24*3600)/mean_motion
+        self.period = (24*3600)/mean_motion
 
-        a = (period**2 * self.center_body.mu/4.0/np.pi**2)**(1/3.0)
+        a = (self.period**2 * self.center_body.mu/4.0/np.pi**2)**(1/3.0)
 
         # eccentricity anomaly at epoch calculated using mean anomaly at epoch
         ea = utils.eccentric_anomaly(mean_anomaly, e)
