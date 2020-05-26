@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     # create satellite object and propagate it using orbital elements
     sat1 = Satellite(sat_id=1, name="ISS", center_body=cb, sat_type="Station")
-    r0, v0 = sat1.propagate_with_coes(coes)
+    r0, v0 = sat1.propagate_with_tle("data/iss.tle")
 
     r0 = r0.tolist()
     v0 = v0.tolist()

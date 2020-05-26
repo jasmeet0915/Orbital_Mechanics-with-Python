@@ -4,3 +4,7 @@ A great portion of information about OrbitPropagation was taken from videos of A
 Step-by-Step Algorithm used for converting Orbital Elements to state vectors in ECI frame of reference:
 <br>
 <a href="https://downloads.rene-schwarz.com/download/M001-Keplerian_Orbit_Elements_to_Cartesian_State_Vectors.pdf">Click Here </a>
+<br><br>
+TO DO:
+<br> i) Add perturbations in orbit propagation
+
